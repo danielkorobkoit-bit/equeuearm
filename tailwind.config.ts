@@ -57,6 +57,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        armtek: {
+          orange: "hsl(var(--armtek-orange))",
+          dark: "hsl(var(--armtek-dark))",
+          light: "hsl(var(--armtek-light))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
