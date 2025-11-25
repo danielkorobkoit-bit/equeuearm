@@ -3,20 +3,8 @@ import logo from "@/assets/logo.png";
 import storeImage from "@/assets/store.png";
 import backgroundImage from "@/assets/background.png";
 
-interface QueueNumber {
-  id: string;
-  number: string;
-  window: string;
-  isActive: boolean;
-}
-
 const QueueDisplay = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [queueNumbers, setQueueNumbers] = useState<QueueNumber[]>([
-    { id: "1", number: "A247", window: "Окно 3", isActive: true },
-    { id: "2", number: "B156", window: "Окно 1", isActive: false },
-    { id: "3", number: "A248", window: "Окно 5", isActive: false },
-  ]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -24,25 +12,6 @@ const QueueDisplay = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    // Simulate queue updates every 10 seconds
-    const queueTimer = setInterval(() => {
-      setQueueNumbers(prev => {
-        const newNumber = {
-          id: Date.now().toString(),
-          number: `A${Math.floor(Math.random() * 900 + 100)}`,
-          window: `Окно ${Math.floor(Math.random() * 5 + 1)}`,
-          isActive: true,
-        };
-        
-        const updated = prev.map(item => ({ ...item, isActive: false }));
-        return [newNumber, ...updated].slice(0, 3);
-      });
-    }, 10000);
-
-    return () => clearInterval(queueTimer);
   }, []);
 
   const formatTime = (date: Date) => {
@@ -68,123 +37,66 @@ const QueueDisplay = () => {
         aspectRatio: "16/9",
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
-        backgroundPosition: "right",
+        backgroundPosition: "center",
       }}
     >
+      {/* Background Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/40 via-background/20 to-transparent"></div>
+
       {/* Header with Logo and Clock */}
-      <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-12 py-8">
+      <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-12 py-6 animate-fade-in">
         <img 
           src={logo} 
           alt="ARMTEK Logo" 
-          className="h-16 md:h-20 object-contain animate-fade-in"
+          className="h-12 md:h-16 object-contain drop-shadow-lg"
         />
-        <div className="text-right animate-fade-in">
-          <div className="text-5xl md:text-6xl font-bold text-secondary tabular-nums tracking-tight">
+        <div className="text-right">
+          <div className="text-4xl md:text-5xl font-bold text-secondary tabular-nums tracking-tight drop-shadow-lg">
             {formatTime(currentTime)}
           </div>
-          <div className="text-xl md:text-2xl text-muted-foreground mt-2">
+          <div className="text-lg md:text-xl text-secondary/80 mt-1 drop-shadow">
             {formatDate(currentTime)}
           </div>
         </div>
       </header>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-2 h-full">
-        {/* Left Panel - Queue Numbers */}
-        <div className="relative flex flex-col justify-center items-center bg-background/95 backdrop-blur-sm px-12">
-          <div className="w-full max-w-2xl space-y-8 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-12 text-center">
-              Вызов клиента
-            </h2>
-            
-            {queueNumbers.map((item, index) => (
-              <div
-                key={item.id}
-                className={`
-                  transition-all duration-500 ease-out
-                  ${item.isActive ? 'queue-number-pulse queue-number-enter' : 'opacity-60 scale-95'}
-                  ${index === 0 ? '' : 'mt-6'}
-                `}
-              >
-                <div className={`
-                  rounded-3xl p-8 md:p-10
-                  ${item.isActive 
-                    ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground shadow-2xl' 
-                    : 'bg-muted text-muted-foreground'
-                  }
-                  transition-all duration-500
-                `}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className={`
-                        text-7xl md:text-8xl font-black tracking-tight mb-2
-                        ${item.isActive ? 'text-primary-foreground' : 'text-secondary'}
-                      `}>
-                        {item.number}
-                      </div>
-                      <div className={`
-                        text-2xl md:text-3xl font-semibold
-                        ${item.isActive ? 'text-primary-foreground/90' : 'text-muted-foreground'}
-                      `}>
-                        {item.window}
-                      </div>
-                    </div>
-                    {item.isActive && (
-                      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary-foreground/20 animate-pulse">
-                        <svg 
-                          className="w-10 h-10 text-primary-foreground" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 5l7 7-7 7" 
-                          />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom Decoration */}
-          <div className="absolute bottom-12 left-0 right-0 px-12">
-            <div className="h-2 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full opacity-30"></div>
-          </div>
-        </div>
-
-        {/* Right Panel - Store Image */}
-        <div 
-          className="relative flex items-center justify-center overflow-hidden"
-          style={{
-            backgroundImage: `linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.1) 20%, transparent 40%), url(${storeImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-gradient-to-t from-secondary/20 via-transparent to-transparent"></div>
-          
-          {/* Animated circles */}
-          <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/3 w-96 h-96 rounded-full bg-primary/5 blur-3xl animate-pulse delay-1000"></div>
+      {/* Main Title - Электронная очередь */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center animate-fade-in">
+        <h1 className="text-7xl md:text-9xl font-black text-secondary mb-4 tracking-tight drop-shadow-2xl queue-number-enter">
+          ЭЛЕКТРОННАЯ
+        </h1>
+        <h2 className="text-6xl md:text-8xl font-black text-gradient-primary drop-shadow-2xl queue-number-enter" style={{ animationDelay: "0.2s" }}>
+          ОЧЕРЕДЬ
+        </h2>
+        
+        {/* Decorative line */}
+        <div className="mt-8 flex justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <div className="h-1.5 w-64 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></div>
         </div>
       </div>
 
+      {/* Store Image - smaller, positioned bottom right */}
+      <div className="absolute bottom-8 right-8 z-5 animate-fade-in" style={{ animationDelay: "0.6s" }}>
+        <img 
+          src={storeImage} 
+          alt="ARMTEK Store" 
+          className="h-32 md:h-48 object-contain drop-shadow-2xl opacity-90 hover:opacity-100 transition-opacity duration-500"
+        />
+      </div>
+
+      {/* Animated decorative elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-primary/5 blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+      <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-secondary/5 blur-2xl animate-pulse" style={{ animationDelay: "2s" }}></div>
+
       {/* Bottom Bar with Info */}
-      <div className="absolute bottom-0 left-0 right-0 bg-secondary/95 backdrop-blur-sm text-background py-6 px-12 z-10">
+      <div className="absolute bottom-0 left-0 right-0 bg-secondary/90 backdrop-blur-md text-background py-4 px-12 z-10 animate-fade-in" style={{ animationDelay: "0.8s" }}>
         <div className="flex items-center justify-between">
           <div className="text-xl md:text-2xl font-semibold">
             Добро пожаловать в ARMTEK
           </div>
-          <div className="text-lg md:text-xl text-background/80">
-            Следите за своим номером на экране
+          <div className="text-lg md:text-xl text-background/90">
+            Следите за номерами на табло
           </div>
         </div>
       </div>
