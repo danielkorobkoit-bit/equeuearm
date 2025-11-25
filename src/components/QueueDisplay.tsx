@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 import storeImage from "@/assets/store.png";
+import wholesaleImage from "@/assets/wholesale.png";
 import backgroundImage from "@/assets/background.png";
 
 const QueueDisplay = () => {
@@ -99,13 +100,25 @@ const QueueDisplay = () => {
               </div>
             </div>
 
-            {/* Bottom: Store Image */}
-            <div className="animate-fade-in store-float" style={{ animationDelay: "0.4s" }}>
-              <img 
-                src={storeImage} 
-                alt="ARMTEK Store" 
-                className="h-40 object-contain drop-shadow-2xl opacity-95 hover:opacity-100 transition-all duration-500 hover:scale-105"
-              />
+            {/* Bottom: Store Images Composition */}
+            <div className="space-y-6 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+              {/* Wholesale/Tech Image */}
+              <div className="store-float-reverse">
+                <img 
+                  src={wholesaleImage} 
+                  alt="ARMTEK Digital" 
+                  className="h-44 object-contain drop-shadow-2xl opacity-95 hover:opacity-100 transition-all duration-500 hover:scale-110"
+                />
+              </div>
+              
+              {/* Store Building Image */}
+              <div className="store-float">
+                <img 
+                  src={storeImage} 
+                  alt="ARMTEK Store" 
+                  className="h-44 object-contain drop-shadow-2xl opacity-95 hover:opacity-100 transition-all duration-500 hover:scale-110"
+                />
+              </div>
             </div>
 
           </div>
