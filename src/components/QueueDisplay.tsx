@@ -100,11 +100,11 @@ const QueueDisplay = () => {
             </div>
 
             {/* Bottom: Store Image */}
-            <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+            <div className="animate-fade-in store-float" style={{ animationDelay: "0.4s" }}>
               <img 
                 src={storeImage} 
                 alt="ARMTEK Store" 
-                className="h-28 object-contain drop-shadow-2xl opacity-90"
+                className="h-40 object-contain drop-shadow-2xl opacity-95 hover:opacity-100 transition-all duration-500 hover:scale-105"
               />
             </div>
 
